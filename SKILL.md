@@ -13,6 +13,9 @@ Core capabilities:
 1. Genre routing: load analysis frameworks by genre
 2. Structured analysis: opinionated segment-by-segment output following framework skeleton
 3. Video processing (optional): scene detection, keyframe extraction, subtitle parsing/transcription
+4. **HTML report generation (default)**: the final deliverable of every analysis is a self-contained HTML file, not plain text
+
+**Important: after every analysis, you MUST generate an HTML report file.** This is the default output format of this skill -- the user does not need to ask for it. Write the analysis as markdown, then immediately call `generate_report.mjs` to produce HTML, then open it in the browser with `open`.
 
 ## When to use
 
