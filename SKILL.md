@@ -23,7 +23,8 @@ All scripts are in the `scripts/` directory **relative to this SKILL.md file**, 
 
 ```bash
 # Find the skill directory (where this SKILL.md lives)
-SKILL_DIR="$(dirname "$(find . ~/.claude -path '*/film-breakdown*' -name 'SKILL.md' 2>/dev/null | head -1)")"
+# -L follows symlinks, which is required for globally installed skills
+SKILL_DIR="$(dirname "$(find -L . .claude ~/.claude -path '*/film-breakdown*' -name 'SKILL.md' -maxdepth 5 2>/dev/null | head -1)")"
 ```
 
 Then run scripts as: `node "$SKILL_DIR"/scripts/generate_report.mjs ...`
