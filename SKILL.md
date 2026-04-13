@@ -17,6 +17,19 @@ Core capabilities:
 
 **Important: after every analysis, you MUST generate an HTML report file.** This is the default output format of this skill -- the user does not need to ask for it. Write the analysis as markdown, then immediately call `generate_report.mjs` to produce HTML, then open it in the browser with `open`.
 
+## Script location
+
+All scripts are in the `scripts/` directory **relative to this SKILL.md file**, not relative to the user's project. Before running any script, locate this skill's installation directory:
+
+```bash
+# Find the skill directory (where this SKILL.md lives)
+SKILL_DIR="$(dirname "$(find . ~/.claude -path '*/film-breakdown*' -name 'SKILL.md' 2>/dev/null | head -1)")"
+```
+
+Then run scripts as: `node "$SKILL_DIR"/scripts/generate_report.mjs ...`
+
+**Do NOT write your own HTML. Always use the generate_report.mjs script.** If the script cannot be found, tell the user the skill may not be installed correctly and ask them to reinstall with `npx skills add ahpxex/film-breakdown-skill`.
+
 ## When to use
 
 - User names a work and asks for breakdown/analysis
@@ -77,18 +90,18 @@ The following steps can run in parallel:
 
 ```bash
 # 1a. Scene detection + keyframe extraction
-node scripts/extract_scenes.mjs \
+node "$SKILL_DIR"/scripts/extract_scenes.mjs \
   --input /path/to/video.mp4 \
   --output /tmp/film-breakdown/scenes/ \
   --threshold 0.3
 
 # 1b. Subtitle extraction
-node scripts/extract_subtitles.mjs \
+node "$SKILL_DIR"/scripts/extract_subtitles.mjs \
   --input /path/to/video.mp4 \
   --srt /path/to/subtitle.srt
 
 # 1c. Audio transcription (only when no subtitles)
-node scripts/transcribe.mjs \
+node "$SKILL_DIR"/scripts/transcribe.mjs \
   --input /path/to/video.mp4 \
   --output /tmp/film-breakdown/transcript.json \
   --model base
@@ -108,7 +121,7 @@ Target: single keyframe < 150KB, total report < 3MB.
 ### Step 2: Build unified timeline
 
 ```bash
-node scripts/build_timeline.mjs \
+node "$SKILL_DIR"/scripts/build_timeline.mjs \
   --scenes /tmp/film-breakdown/scenes/scenes.json \
   --subtitles /tmp/film-breakdown/scenes/subtitles.json \
   --output /tmp/film-breakdown/timeline.json
@@ -125,7 +138,7 @@ View extracted keyframes with the Read tool, combine with timeline data for segm
 Write analysis as a markdown file (using standard `![alt](path)` syntax to reference keyframes), then generate self-contained HTML report:
 
 ```bash
-node scripts/generate_report.mjs \
+node "$SKILL_DIR"/scripts/generate_report.mjs \
   --analysis /tmp/film-breakdown/analysis.md \
   --keyframes /tmp/film-breakdown/scenes/keyframes \
   --output /tmp/film-breakdown/report.html
