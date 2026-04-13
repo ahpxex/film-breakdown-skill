@@ -214,9 +214,19 @@ async function resolveImages(blocks, keyframeDir) {
 
 // --- HTML template ---
 
+function detectLanguage(text) {
+  // Count CJK characters vs total
+  const cjk = (text.match(/[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff]/g) || []).length;
+  const total = text.replace(/\s/g, "").length;
+  return total > 0 && cjk / total > 0.15 ? "zh" : "en";
+}
+
 function generateHtml(title, bodyHtml) {
+  const lang = detectLanguage(bodyHtml);
+  const isCJK = lang === "zh";
+
   return `<!DOCTYPE html>
-<html lang="zh">
+<html lang="${lang}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -235,14 +245,17 @@ html {
 body {
   background: #f6f5f1;
   color: #1c1c1b;
-  font-family:
-    "Noto Serif CJK SC", "Source Han Serif SC", "Source Han Serif",
+  font-family: ${isCJK
+    ? `"Noto Serif CJK SC", "Source Han Serif SC", "Source Han Serif",
     "Hiragino Mincho ProN", "Yu Mincho",
     "Songti SC", "SimSun",
-    Georgia, "Times New Roman", serif;
-  font-size: 17px;
-  line-height: 1.9;
-  letter-spacing: 0.01em;
+    Georgia, "Times New Roman", serif`
+    : `Georgia, "Times New Roman",
+    "Noto Serif CJK SC", "Source Han Serif SC",
+    "Hiragino Mincho ProN", "Songti SC", serif`};
+  font-size: ${isCJK ? "17px" : "18px"};
+  line-height: ${isCJK ? "1.9" : "1.7"};
+  letter-spacing: ${isCJK ? "0.01em" : "0"};
 }
 
 /* --- Layout --- */
