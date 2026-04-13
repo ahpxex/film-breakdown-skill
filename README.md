@@ -2,7 +2,7 @@
 
 Structured film/video breakdown analysis for Claude Code. Outputs self-contained HTML reports with embedded keyframes.
 
-[中文文档](README.zh.md)
+[中文版](https://github.com/ahpxex/lapian.skill)
 
 ---
 
@@ -80,7 +80,6 @@ After installation, just tell Claude Code:
 
 ```
 SKILL.md                          # Skill definition (English)
-SKILL.zh.md                       # Skill definition (Chinese)
 references/
   schema.md                       # Timeline JSON schema
   frameworks/
