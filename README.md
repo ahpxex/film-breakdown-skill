@@ -50,7 +50,7 @@ Generated HTML reports are single-file, self-contained (keyframes embedded as ba
 ## 安装 / Installation
 
 ```bash
-npx skills add AHpxDE/film-breakdown-skill
+npx skills add ahpxex/film-breakdown-skill
 ```
 
 ## 系统依赖 / System dependencies
